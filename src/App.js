@@ -15,7 +15,7 @@ function App() {
   async function handleAddRepository() {
     const response = await api.post("repositories", {
       title: `Novo Repositorio ${Date.now()}`,
-      url: "www.github/lamendes",
+      url: "www.github.com/lamendes",
       techs: ["NodeJs", "ReactJS"],
     });
 
@@ -30,6 +30,13 @@ function App() {
 
   async function handleRemoveRepository(id) {
     await api.delete(`repositories/${id}`);
+
+    const repositoryIndex = repositories.findIndex(
+      (repository) => repository.id === id
+    );
+
+    repositories.splice(repositoryIndex, 1);
+    setRepositories([...repositories]);
   }
 
   return (
@@ -38,7 +45,10 @@ function App() {
         {repositories.map((repository) => (
           <li key={repository.id}>
             {repository.title}{" "}
-            <button onClick={() => handleLikeRepository(repository.id)}>
+            <button
+              className="btnlike"
+              onClick={() => handleLikeRepository(repository.id)}
+            >
               Like
             </button>
             <button onClick={() => handleRemoveRepository(repository.id)}>
